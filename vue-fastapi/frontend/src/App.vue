@@ -1,8 +1,5 @@
 <template>
   <div class="app">
-    <header>
-      <h1>Appointment Booking</h1>
-    </header>
     <main>
       <router-view></router-view>
     </main>

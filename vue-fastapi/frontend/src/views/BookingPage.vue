@@ -1,15 +1,22 @@
 <template>
   <div class="booking-page">
 
+    <h2>Select a Date and Time</h2>
+
     <CalendarGrid @date-selected="handleDateSelected" />
 
-    <div class="calendar-section">
-      <h2>Select a Date and Time</h2>
+    <!-- <div class="calendar-section">
       <button @click="fetchTimeSlots">fetch slots</button>
-    </div>
+    </div> -->
 
     <div class="time-slot-container">
-      <button v-for="slot in store.slots[store.selectedDate]">{{ formatSlotTime(slot.time) }}</button>
+      <button
+        v-for="slot in store.slots[store.selectedDate]"
+        :key="slot.time"
+        class="time-slot"
+      >
+        {{ formatSlotTime(slot.time) }}
+      </button>
     </div>
 
     <!-- <TimeSlots :slots="store.slots" /> -->
@@ -141,108 +148,38 @@ export default {
 </script>
 
 <style scoped>
+
 .booking-page {
   display: flex;
   flex-direction: column;
 }
 
-.calendar-section,
-.booking-form {
+.calendar-section {
   padding: 1rem;
-}
-
-.calendar-container {
-  margin-top: 1rem;
-}
-
-.date-picker {
-  margin-bottom: 1rem;
-}
-
-.date-picker input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 }
 
 .time-slot-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.time-slots {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.5rem;
+  gap: 0.1rem;
+  margin-top: 1.5rem;
 }
 
 .time-slot {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: #fff;
-  cursor: pointer;
-}
-
-.time-slot:hover:not(:disabled) {
-  background: #f0f0f0;
-}
-
-.time-slot.unavailable {
-  background: #f5f5f5;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 0.75rem;
-  background: #42b983;
-  color: white;
+  background-color: #f0f0f0;
   border: none;
-  border-radius: 4px;
+  width: 6rem;
+  height: 3rem;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  border-radius: 0.25rem;
   cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  transition: background-color 0.1s ease;
 }
 
-.submit-btn:hover:not(:disabled) {
-  background: #3aa876;
-}
-
-.submit-btn:disabled {
-  background: #9be0c0;
-  cursor: not-allowed;
-}
-
-.loading,
-.error,
-.no-slots {
-  text-align: center;
-  padding: 1rem;
-  margin: 1rem 0;
-}
-
-.error {
-  color: #dc3545;
-}
-
-.loading {
-  color: #666;
+.time-slot:hover {
+  background-color: #e0e0e0;
 }
 </style> 

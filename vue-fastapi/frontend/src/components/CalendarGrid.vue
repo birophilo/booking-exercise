@@ -29,6 +29,7 @@
           class="nav-button" 
           @click="nextMonth" 
           aria-label="Next month"
+          :disabled="isNextMonth"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -103,6 +104,13 @@ const isCurrentMonth = computed(() => {
   const today = new Date()
   return currentDate.value.getMonth() === today.getMonth() &&
          currentDate.value.getFullYear() === today.getFullYear()
+})
+
+const isNextMonth = computed(() => {
+  const today = new Date()
+  currentDate.value > today
+  return currentDate.value.getMonth() - today.getMonth() === 1 &&
+         currentDate.value > today
 })
 
 const calendarWeeks = computed(() => {
@@ -229,12 +237,18 @@ const emit = defineEmits(['date-selected', 'month-changed'])
   width: 2rem;
   height: 2rem;
   transition: all 0.2s;
-  margin: 0 20px 0 20px;
+  margin: 0 20px;
+  border: none;
 }
 
-.nav-button:hover {
+.nav-button:hover:not(:disabled) {
   background-color: #e2e8f0;
   color: #1e293b;
+}
+
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .calendar-days {
@@ -248,7 +262,7 @@ const emit = defineEmits(['date-selected', 'month-changed'])
   text-align: center;
   font-weight: 500;
   font-size: 0.7rem;
-  letter-spacing: 0.5px;;
+  letter-spacing: 0.5px;
   color: black;
 }
 
@@ -273,6 +287,7 @@ const emit = defineEmits(['date-selected', 'month-changed'])
   cursor: pointer;
   margin: 3px;
   height: 50px;
+  border: none;
 }
 
 .calendar-day:hover:not(.empty-day) {
@@ -295,10 +310,5 @@ const emit = defineEmits(['date-selected', 'month-changed'])
 
 .selected-day:hover {
   background-color: #2563eb;
-}
-
-.nav-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 </style> 

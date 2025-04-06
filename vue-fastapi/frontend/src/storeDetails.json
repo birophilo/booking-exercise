@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Belgravia",
+    "address": "43 Elizabeth Street, London",
+    "postcode": "SW1W 9PP",
+    "image": "Belgravia.jpg"
+  },
+  {
+    "name": "St James's",
+    "address": "68 Jermyn Street, London",
+    "postcode": "SW1Y 6NY",
+    "image": "StJames.jpg"
+  },
+  {
+    "name": "Soho",
+    "address": "37 Marshall Street, London",
+    "postcode": "W1F 7EZ",
+    "image": "Soho.jpg"
+  },
+  {
+    "name": "Notting Hill",
+    "address": "312 Portobello Road, London",
+    "postcode": "W10 5RU",
+    "image": "NottingHill.jpg"
+  },
+  {
+    "name": "Borough",
+    "address": "9 Park Street, London",
+    "postcode": "SE1 9AB",
+    "image": "Borough.jpg"
+  },
+  {
+    "name": "Broadway Market",
+    "address": "9 Broadway Market, London",
+    "postcode": "E8 4PH",
+    "image": "BroadwayMarket.jpg"
+  },
+  {
+    "name": "Covent Garden",
+    "address": "41 Monmouth Street, London",
+    "postcode": "WC2H 9DD",
+    "image": "CoventGarden.jpg"
+  },
+  {
+    "name": "Spitalfields",
+    "address": "86 Commercial Street, London",
+    "postcode": "E1 6LY",
+    "image": "Spitalfields.jpg"
+  },
+  {
+    "name": "Cheapside",
+    "address": "123 Cheapside, London",
+    "postcode": "EC2V 6BT",
+    "image": "Cheapside.png"
+  },
+  {
+    "name": "Islington",
+    "address": "56 Cross Street, London",
+    "postcode": "N1 2BA",
+    "image": "Islington.jpg"
+  },
+  {
+    "name": "Marylebone",
+    "address": "28 New Cavendish St, London",
+    "postcode": "W1G 8UE",
+    "image": "Marylebone.jpg"
+  },
+  {
+    "name": "Coal Drops Yard",
+    "address": "14 Bagley Walk Arches, London",
+    "postcode": "N1C 4DH",
+    "image": "CoalDropYard.jpg"
+  },
+  {
+    "name": "Hampstead",
+    "address": "22 Hampstead High Street, London",
+    "postcode": "NW3 1QA",
+    "image": "Hampstead.jpg"
+  }
+]

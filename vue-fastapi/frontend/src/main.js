@@ -2,13 +2,15 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import App from './App.vue'
+import StoreSelectionPage from './views/StoreSelectionPage.vue'
 import BookingPage from './views/BookingPage.vue'
 import ConfirmationPage from './views/ConfirmationPage.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: BookingPage },
+    { path: '/', component: StoreSelectionPage },
+    { path: '/booking', component: BookingPage },
     { path: '/confirmation', component: ConfirmationPage }
   ]
 })
