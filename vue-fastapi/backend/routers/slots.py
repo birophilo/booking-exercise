@@ -14,15 +14,15 @@ async def get_slots(
 ):
     try:
         params = {
-            "eventTypeId": eventTypeId,
-            "startTime": startTime,
-            "endTime": endTime,
-            "timeZone": timeZone,
+            'eventTypeId': eventTypeId,
+            'startTime': startTime,
+            'endTime': endTime,
+            'timeZone': timeZone,
         }
         response = calcom_client.get_slots(params)
-        return response
+        return response['slots']
 
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"Invalid slot data: {str(e)}")
+        raise HTTPException(status_code=400, detail=f'Invalid slot data: {str(e)}')
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching slots: {str(e)}")
+        raise HTTPException(status_code=500, detail=f'Error fetching slots: {str(e)}')

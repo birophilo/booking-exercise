@@ -7,15 +7,22 @@
       <h2>Select a Date and Time</h2>
       <button @click="fetchTimeSlots">fetch slots</button>
     </div>
+
+    <div class="time-slot-container">
+      <button v-for="slot in store.slots[store.selectedDate]">{{ formatSlotTime(slot.time) }}</button>
+    </div>
+
+    <!-- <TimeSlots :slots="store.slots" /> -->
   </div>
 </template>
 
 <script>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from '../store.js'
 import { calApi } from '../services/calApi'
 import CalendarGrid from '../components/CalendarGrid.vue'
-
+// import TimeSlots from '../components/TimeSlots.vue'
 
 
 export default {
@@ -24,8 +31,9 @@ export default {
     CalendarGrid
   },
   setup() {
+    const store = useStore()
     const router = useRouter()
-    const selectedDate = ref('')
+    const selectedDate = ref('2025-04-07')
     const selectedTimeSlot = ref(null)
     const timeSlots = ref([])
     const loading = ref(false)
@@ -36,6 +44,13 @@ export default {
       email: ''
     })
 
+    const formatSlotTime = (dateString) => {
+      return new Date(dateString).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+      })
+    }
+
     const minDate = computed(() => {
       const today = new Date()
       return today.toISOString().split('T')[0]
@@ -43,6 +58,7 @@ export default {
 
     const handleDateSelected = (date) => {
       // Handle the selected date, e.g., fetch available time slots
+      selectedDate.value = date
       console.log('Selected date:', date)
     }
 
@@ -55,7 +71,7 @@ export default {
 
       try {
         const slots = await calApi.getSlots('2025-04-07')
-        console.log(slots)
+        store.setSlots(slots)
         timeSlots.value = slots
       } catch (err) {
         error.value = 'Failed to load available time slots. Please try again.'
@@ -100,7 +116,13 @@ export default {
       }
     }
 
+    onMounted(async () => {
+      await fetchTimeSlots()
+    })
+
     return {
+      store,
+      formatSlotTime,
       selectedDate,
       selectedTimeSlot,
       timeSlots,
@@ -142,6 +164,11 @@ export default {
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.time-slot-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .time-slots {

@@ -6,6 +6,7 @@
           class="nav-button" 
           @click="previousMonth" 
           aria-label="Previous month"
+          :disabled="isCurrentMonth"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -18,6 +19,7 @@
             stroke-linecap="round" 
             stroke-linejoin="round" 
             class="lucide lucide-chevron-left w-5 h-5"
+            :class="{ 'opacity-50': isCurrentMonth }"
           >
             <path d="m15 18-6-6 6-6"></path>
           </svg>
@@ -74,8 +76,11 @@
 </template>
 
 <script setup>
+// import dayjs from 'dayjs'
 import { ref, computed } from 'vue'
+import { useStore } from '../store'
 
+const store = useStore()
 // Reactive state
 const currentDate = ref(new Date())
 const selectedDate = ref(null)
@@ -92,6 +97,12 @@ const currentMonth = computed(() => {
 
 const currentMonthName = computed(() => {
   return currentDate.value.toLocaleString('default', { month: 'long' })
+})
+
+const isCurrentMonth = computed(() => {
+  const today = new Date()
+  return currentDate.value.getMonth() === today.getMonth() &&
+         currentDate.value.getFullYear() === today.getFullYear()
 })
 
 const calendarWeeks = computed(() => {
@@ -134,6 +145,20 @@ const calendarWeeks = computed(() => {
 
 // METHODS
 
+function formatDateToYYYYMMDD(date) {
+  const [day, month, year] = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'Europe/London',
+  }).formatToParts(date).reduce((acc, part) => {
+    if (part.type !== 'literal') acc.push(part.value);
+    return acc;
+  }, []);
+
+  return `${year}-${month}-${day}`;
+}
+
 const isCurrentDay = (day) => {
   if (!day) return false
   
@@ -158,11 +183,10 @@ const isSelectedDay = (day) => {
 
 const selectDay = (day) => {
   selectedDate.value = day
-  emit('date-selected', day)
+  store.setSelectedDate(formatDateToYYYYMMDD(day))
 }
 
 const previousMonth = () => {
-  // Create a new date object to avoid mutating the original
   const newDate = new Date(currentDate.value)
   newDate.setMonth(newDate.getMonth() - 1)
   currentDate.value = newDate
@@ -271,5 +295,10 @@ const emit = defineEmits(['date-selected', 'month-changed'])
 
 .selected-day:hover {
   background-color: #2563eb;
+}
+
+.nav-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 </style> 
