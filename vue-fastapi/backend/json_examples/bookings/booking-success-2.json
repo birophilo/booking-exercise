@@ -1,0 +1,91 @@
+{
+  "id": 7031051,
+  "uid": "cBK3YY5QczXGbuaid82owE",
+  "idempotencyKey": "99a21f4a-442d-59b6-a39f-d528b440d99e",
+  "userId": 1465348,
+  "userPrimaryEmail": "andrewbeales@gmail.com",
+  "eventTypeId": 2211735,
+  "title": "Eye Exam between Andrew Beales and Andrew Beales",
+  "description": "",
+  "customInputs": {},
+  "responses": {
+    "name": "Andrew Beales",
+    "email": "andrewbeales@gmail.com",
+    "location": { "value": "userPhone", "optionValue": "" },
+    "smsReminderNumber": ""
+  },
+  "startTime": "2025-04-07T14:00:00.000Z",
+  "endTime": "2025-04-07T14:20:00.000Z",
+  "location": "userPhone",
+  "createdAt": "2025-04-05T20:40:47.562Z",
+  "updatedAt": "2025-04-05T20:40:47.562Z",
+  "status": "ACCEPTED",
+  "paid": false,
+  "destinationCalendarId": 546614,
+  "cancellationReason": null,
+  "rejectionReason": null,
+  "reassignReason": null,
+  "reassignById": null,
+  "dynamicEventSlugRef": null,
+  "dynamicGroupSlugRef": null,
+  "rescheduled": null,
+  "fromReschedule": null,
+  "recurringEventId": null,
+  "smsReminderNumber": "",
+  "scheduledJobs": [],
+  "metadata": {},
+  "isRecorded": false,
+  "iCalUID": "cBK3YY5QczXGbuaid82owE@Cal.com",
+  "iCalSequence": 0,
+  "rating": null,
+  "ratingFeedback": null,
+  "noShowHost": false,
+  "oneTimePassword": null,
+  "cancelledBy": null,
+  "rescheduledBy": null,
+  "creationSource": "API_V1",
+  "user": {
+    "email": null,
+    "name": "Andrew Beales",
+    "timeZone": "Europe/London",
+    "username": "abeales"
+  },
+  "attendees": [
+    {
+      "id": 8293422,
+      "email": "andrewbeales@gmail.com",
+      "name": "Andrew Beales",
+      "timeZone": "Europe/London",
+      "phoneNumber": null,
+      "locale": "en",
+      "bookingId": 7031051,
+      "noShow": false
+    }
+  ],
+  "payment": [],
+  "references": [
+    {
+      "type": "google_calendar",
+      "uid": "_cd14mcqpb4ql2orqb13m4tb1d5i3gcjfet2k0gr1dgn66rrd",
+      "thirdPartyRecurringEventId": null,
+      "meetingId": "_cd14mcqpb4ql2orqb13m4tb1d5i3gcjfet2k0gr1dgn66rrd",
+      "meetingPassword": "",
+      "meetingUrl": "",
+      "externalCalendarId": "andrewbeales@gmail.com",
+      "credentialId": 900300
+    }
+  ],
+  "appsStatus": [
+    {
+      "appName": "google-calendar",
+      "type": "google_calendar",
+      "success": 1,
+      "failures": 0,
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "paymentRequired": false,
+  "luckyUsers": [],
+  "isDryRun": false
+}

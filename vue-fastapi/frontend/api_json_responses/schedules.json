@@ -1,0 +1,20 @@
+{
+  "schedules": [
+    {
+      "id": 590745,
+      "userId": 1465348,
+      "name": "Working Hours",
+      "timeZone": "Europe/London",
+      "availability": [
+        {
+          "id": 15870443,
+          "eventTypeId": null,
+          "date": null,
+          "days": [1, 2, 3, 4, 5],
+          "startTime": "09:00:00",
+          "endTime": "17:00:00"
+        }
+      ]
+    }
+  ]
+}

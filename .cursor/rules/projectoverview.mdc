@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# A Single Page App for booking appointments.
+
+The application should provide a clean, efficient booking experience.
+
+## Technology
+- Use Vue.js for the frontend: Vue components with ES6 Javascipt
+- Cal.com API integration for managing appointments and checking availability of time slots
+
+## Routes
+- booking page with calendar
+- success confirmation page
+
+## Calendar
+For the cal.com calendar, either use an embedded cal.com widget, or use the cal.com API and make the calendar with Vue components. The calendar should have:
+- A date picker
+- A selection of time slots for each date
+- Unavailable slots are greyed out/disabled. This will require integration with Cal.com API to fetch availability
+- Booking form contains name and email fields
+
+## Confirmation
+- Success page after booking
+- Display
