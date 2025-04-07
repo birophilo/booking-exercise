@@ -6,48 +6,54 @@
         <button class="close-button" @click="closeModal">&times;</button>
       </div>
       <div class="modal-body">
-        <p>You are booking an appointment for:</p>
-        <div class="appointment-details">
-          <p class="date">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
-          <p class="location">
-            Cubitts {{ store.selectedBranch.name }}
-          </p>
-          <p class="location">
-            {{ store.selectedBranch.address }},
-            {{ store.selectedBranch.postcode }}.
-          </p>
+        <div v-if="submitting" class="loading-container">
+          <div class="spinner"></div>
+          <p>Submitting your booking...</p>
         </div>
-
-        <div class="form-container">
-          <div class="form-group">
-            <!-- <label for="name">Your Name</label> -->
-            <input
-              type="text"
-              id="name"
-              v-model="formData.name"
-              placeholder="Full name"
-              required
-            />
+        <div v-else>
+          <p>You are booking an appointment for:</p>
+          <div class="appointment-details">
+            <p class="date">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
+            <p class="location">
+              Cubitts {{ store.selectedBranch.name }}
+            </p>
+            <p class="location">
+              {{ store.selectedBranch.address }},
+              {{ store.selectedBranch.postcode }}.
+            </p>
           </div>
 
-          <div class="form-group">
-            <!-- <label for="email">Email Address</label> -->
-            <input
-              type="email"
-              id="email"
-              v-model="formData.email"
-              placeholder="Email address"
-              required
-            />
+          <div class="form-container">
+            <div class="form-group">
+              <!-- <label for="name">Your Name</label> -->
+              <input
+                type="text"
+                id="name"
+                v-model="formData.name"
+                placeholder="Full name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <!-- <label for="email">Email Address</label> -->
+              <input
+                type="email"
+                id="email"
+                v-model="formData.email"
+                placeholder="Email address"
+                required
+              />
+            </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="cancel-button" @click="closeModal">Cancel</button>
+        <button class="cancel-button" @click="closeModal" :disabled="submitting">Cancel</button>
         <button
           class="confirm-button"
           @click="confirm"
-          :disabled="!isFormValid"
+          :disabled="!isFormValid || submitting"
         >
           Confirm
         </button>
@@ -82,6 +88,10 @@ export default {
     formData: {
       type: Object,
       required: true
+    },
+    submitting: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['close', 'confirm', 'update:formData'],
@@ -192,6 +202,30 @@ export default {
   padding: 1.5rem;
 }
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #333;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .appointment-details {
   margin-top: 1rem;
   padding: 1rem;
@@ -250,36 +284,44 @@ export default {
   gap: 1rem;
 }
 
-.cancel-button, .confirm-button {
+.cancel-button {
   padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
   border-radius: 4px;
+  color: #4b5563;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-.cancel-button {
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  color: #333;
-}
-
 .cancel-button:hover {
-  background-color: #e0e0e0;
+  background-color: #e5e7eb;
 }
 
 .confirm-button {
+  padding: 0.5rem 1rem;
   background-color: #3b82f6;
   border: none;
+  border-radius: 4px;
   color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.confirm-button:hover:not(:disabled) {
+.confirm-button:hover {
   background-color: #2563eb;
 }
 
 .confirm-button:disabled {
   background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+.cancel-button:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
   cursor: not-allowed;
 }
 </style> 

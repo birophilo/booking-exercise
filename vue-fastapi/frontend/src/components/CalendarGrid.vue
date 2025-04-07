@@ -81,13 +81,11 @@
 </template>
 
 <script setup>
-// import dayjs from 'dayjs'
 import { ref, computed } from 'vue'
 import { useStore } from '../store'
 import { formatDateToYYYYMMDD } from '../utils.js'
 
 const store = useStore()
-// Reactive state
 const currentDate = ref(new Date())
 const selectedDate = ref(null)
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']

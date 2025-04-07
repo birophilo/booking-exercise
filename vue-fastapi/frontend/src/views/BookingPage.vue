@@ -3,25 +3,22 @@
 
     <h2>Select a Date and Time</h2>
 
-    <CalendarGrid
-      @date-selected="handleDateSelected"
-      @fetch-slots-for-week=""
-    />
+    <CalendarGrid @date-selected="handleDateSelected" />
 
-    <!-- <div class="calendar-section">
-      <button @click="fetchTimeSlots">fetch slots</button>
-    </div> -->
-
-    <div class="time-slot-container">
-      <button
-        v-for="slot in store.slots[store.selectedDate]"
-        :key="slot.time"
-        class="time-slot"
-        @click="openConfirmModal(slot)"
-      >
-        {{ formatSlotTime(slot.time) }}
-      </button>
+    <div v-if="showTimeSlots">
+      <div v-if="loadingTimeSlots" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading available time slots...</p>
+      </div>
+      <div v-else>
+        <TimeSlotContainer
+          :slots="store.slots[store.selectedDate] || []"
+          @select-slot="openConfirmModal"
+        />
+      </div>
     </div>
+
+
 
     <ConfirmModal
       :is-open="showConfirmModal"
@@ -29,11 +26,11 @@
       :time="selectedTimeSlot ? selectedTimeSlot.time : ''"
       :location="selectedBranch ? selectedBranch.name : ''"
       :form-data="formData"
+      :submitting="submitting"
       @close="closeConfirmModal"
       @confirm="confirmTimeSlot"
     />
 
-    <!-- <TimeSlots :slots="store.slots" /> -->
   </div>
 </template>
 
@@ -45,22 +42,23 @@ import { calApi } from '../services/calApi'
 import { formatDateToYYYYMMDD, getStartOfWeek } from '../utils.js'
 import CalendarGrid from '../components/CalendarGrid.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
-// import TimeSlots from '../components/TimeSlots.vue'
+import TimeSlotContainer from '../components/TimeSlotContainer.vue'
 
 
 export default {
   name: 'BookingPage',
   components: {
     CalendarGrid,
-    ConfirmModal
+    ConfirmModal,
+    TimeSlotContainer
   },
   setup() {
     const store = useStore()
     const router = useRouter()
     const selectedDate = ref('2025-04-07')
     const selectedTimeSlot = ref(null)
-    const timeSlots = ref([])
-    const loading = ref(false)
+    const loadingTimeSlots = ref(false)
+    const showTimeSlots = ref(false)
     const error = ref('')
     const submitting = ref(false)
     const showConfirmModal = ref(false)
@@ -83,9 +81,11 @@ export default {
     })
 
     const handleDateSelected = (date) => {
+
       // Fetch available time slots
       selectedDate.value = date
       const fetchedDates = Object.keys(store.slots)
+
       // If selected date not already fetched, fetch that week's slots
       if (!fetchedDates.includes(formatDateToYYYYMMDD(date))) {
         const fetchDate = getStartOfWeek(date)
@@ -95,20 +95,23 @@ export default {
 
     const fetchTimeSlots = async (date) => {
 
-      loading.value = true
+      loadingTimeSlots.value = true
       error.value = ''
-      timeSlots.value = []
 
       try {
 
         const slots = await calApi.getSlots(store.selectedBranch.name, date)
-        store.setSlots(slots)
-        timeSlots.value = slots
+        console.log("SLOTS")
+        console.log(slots)
+        console.log("STORE SLOTS")
+        console.log(store.slots)
+        store.setSlots({...store.slots, ...slots})
+        showTimeSlots.value = true
       } catch (err) {
         error.value = 'Failed to load available time slots. Please try again.'
         console.error('Error fetching slots:', err)
       } finally {
-        loading.value = false
+        loadingTimeSlots.value = false
       }
     }
 
@@ -123,7 +126,6 @@ export default {
 
     const confirmTimeSlot = () => {
       submitBooking()
-      closeConfirmModal()
     }
 
     const submitBooking = async () => {
@@ -138,7 +140,7 @@ export default {
           storeName: store.selectedBranch.name
         }
 
-        const booking = await calApi.createBooking(bookingData)
+        await calApi.createBooking(bookingData)
 
         // Store booking details in localStorage for the confirmation page
         localStorage.setItem('cubittsLastBooking', JSON.stringify({
@@ -149,6 +151,7 @@ export default {
           storeName: `${store.selectedBranch.name}`
         }))
 
+        closeConfirmModal()
         router.push('/confirmation')
       } catch (err) {
         error.value = 'Failed to create booking. Please try again.'
@@ -174,8 +177,8 @@ export default {
       formatSlotTime,
       selectedDate,
       selectedTimeSlot,
-      timeSlots,
-      loading,
+      loadingTimeSlots,
+      showTimeSlots,
       error,
       submitting,
       formData,
@@ -202,6 +205,30 @@ export default {
 
 .calendar-section {
   padding: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #333;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .time-slot-container {
