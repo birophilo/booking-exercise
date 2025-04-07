@@ -4,7 +4,8 @@ export const useStore = defineStore('main', {
   state: () => ({
     slots: [],
     selectedDate: '',
-    selectedBranch: {}
+    selectedBranch: {},
+    bookingDetails: {}
   }),
   actions: {
     setSlots(slots) {
@@ -15,6 +16,9 @@ export const useStore = defineStore('main', {
     },
     setSelectedBranch(branchName) {
       this.selectedBranch = branchName
+    },
+    setBookingDetails(bookingDetails) {
+      this.bookingDetails = bookingDetails
     }
   }
 })

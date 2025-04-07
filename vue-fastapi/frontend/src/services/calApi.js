@@ -61,8 +61,10 @@ export const calApi = {
   async getSlots(storeName, date) {
     const params = new URLSearchParams();
 
-    const weekLater = new Date()
+    const weekLater = new Date(date)
     weekLater.setDate(date.getDate() + 8)
+
+
 
 
     params.append('startTime', date.toISOString().slice(0, 10))

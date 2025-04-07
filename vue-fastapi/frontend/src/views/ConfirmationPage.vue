@@ -1,19 +1,22 @@
 <template>
   <div class="confirmation-page">
-    <div class="confirmation-card">
-      <div class="success-icon">✓</div>
-      <h2>Booking Confirmed!</h2>
-      <p>Your appointment has been successfully scheduled.</p>
-      <div class="booking-details" v-if="bookingDetails">
-        <p><strong>Date:</strong> {{ formatDate(bookingDetails.date) }}</p>
-        <p><strong>Time:</strong> {{ bookingDetails.time }}</p>
-        <p><strong>Name:</strong> {{ bookingDetails.name }}</p>
-        <p><strong>Email:</strong> {{ bookingDetails.email }}</p>
-      </div>
-      <div v-else class="error">
-        No booking details found. Please make a new booking.
-      </div>
-      <button class="new-booking-btn" @click="goToBooking">Book Another Appointment</button>
+    <div class="confirmation-card" v-if="store.bookingDetails">
+      <img :src="confirmationPageImage" width="100%" />
+      <h2>Booking Confirmed</h2>
+      <p>Your eye test has been booked for:</p>
+      <p>
+        {{ formatDate(store.bookingDetails.date) }}<br />
+        time: {{ formatTime(store.bookingDetails.date) }}
+      </p>
+      <p>
+        Cubitts {{ store.bookingDetails.branch.name }}<br />
+        {{ store.bookingDetails.branch.address }}, {{ store.bookingDetails.branch.postcode }}.
+      </p>
+      <button class="new-booking-btn" @click="goToBooking">Return to booking page</button><br />
+      <button class="new-booking-btn" @click="goToBooking">Cubitts</button><br />
+    </div>
+    <div v-else class="error">
+      No booking details could be loaded. Please check your email for booking details.
     </div>
   </div>
 </template>
@@ -21,10 +24,13 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from '../store'
+import confirmationPageImage from '../assets/confirmation.jpg'
 
 export default {
   name: 'ConfirmationPage',
   setup() {
+    const store = useStore()
     const router = useRouter()
     const bookingDetails = ref(null)
 
@@ -44,13 +50,24 @@ export default {
       })
     }
 
+    const formatTime = (dateString) => {
+      return new Date(dateString).toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      })
+    }
+
     const goToBooking = () => {
       router.push('/')
     }
 
     return {
+      store,
       bookingDetails,
+      confirmationPageImage,
       formatDate,
+      formatTime,
       goToBooking
     }
   }
@@ -67,18 +84,8 @@ export default {
 
 .confirmation-card {
   text-align: center;
-  padding: 2rem;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
   width: 100%;
-}
-
-.success-icon {
-  font-size: 4rem;
-  color: #42b983;
-  margin-bottom: 1rem;
 }
 
 .booking-details {
@@ -99,13 +106,11 @@ export default {
 }
 
 .new-booking-btn {
-  padding: 0.75rem 1.5rem;
-  background: #42b983;
-  color: white;
+  padding: 0.2rem 0.5rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 .new-booking-btn:hover {

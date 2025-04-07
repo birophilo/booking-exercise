@@ -18,13 +18,11 @@
       </div>
     </div>
 
-
-
     <ConfirmModal
       :is-open="showConfirmModal"
       :date="store.selectedDate"
       :time="selectedTimeSlot ? selectedTimeSlot.time : ''"
-      :location="selectedBranch ? selectedBranch.name : ''"
+      :location="store.selectedBranch ? store.selectedBranch.name : ''"
       :form-data="formData"
       :submitting="submitting"
       @close="closeConfirmModal"
@@ -101,10 +99,6 @@ export default {
       try {
 
         const slots = await calApi.getSlots(store.selectedBranch.name, date)
-        console.log("SLOTS")
-        console.log(slots)
-        console.log("STORE SLOTS")
-        console.log(store.slots)
         store.setSlots({...store.slots, ...slots})
         showTimeSlots.value = true
       } catch (err) {
@@ -142,17 +136,16 @@ export default {
 
         await calApi.createBooking(bookingData)
 
-        // Store booking details in localStorage for the confirmation page
-        localStorage.setItem('cubittsLastBooking', JSON.stringify({
-          date: selectedDate.value.time,
-          time: selectedTimeSlot.value.time,
+        store.setBookingDetails({
+          date: selectedTimeSlot.value.time,
           name: formData.name,
           email: formData.email,
-          storeName: `${store.selectedBranch.name}`
-        }))
+          branch: store.selectedBranch
+        })
 
         closeConfirmModal()
         router.push('/confirmation')
+
       } catch (err) {
         error.value = 'Failed to create booking. Please try again.'
         console.error('Error creating booking:', err)
@@ -165,11 +158,6 @@ export default {
       const today = new Date()
       await fetchTimeSlots(today)
 
-      // Get the selected branch from localStorage
-      const storedBranch = localStorage.getItem('selectedBranch')
-      if (storedBranch) {
-        selectedBranch.value = JSON.parse(storedBranch)
-      }
     })
 
     return {

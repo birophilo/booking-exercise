@@ -11,7 +11,6 @@
           <p>Submitting your booking...</p>
         </div>
         <div v-else>
-          <p>You are booking an appointment for:</p>
           <div class="appointment-details">
             <p class="date">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
             <p class="location">
@@ -25,23 +24,23 @@
 
           <div class="form-container">
             <div class="form-group">
-              <!-- <label for="name">Your Name</label> -->
+              <label for="name">please enter your full name</label>
               <input
                 type="text"
                 id="name"
                 v-model="formData.name"
-                placeholder="Full name"
+                placeholder="name"
                 required
               />
             </div>
 
             <div class="form-group">
-              <!-- <label for="email">Email Address</label> -->
+              <label for="email">your email address</label>
               <input
                 type="email"
                 id="email"
                 v-model="formData.email"
-                placeholder="Email address"
+                placeholder="email"
                 required
               />
             </div>
