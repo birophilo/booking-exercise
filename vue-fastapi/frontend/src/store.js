@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useStore = defineStore('main', {
   state: () => ({
     slots: [],
-    selectedDate: ''
+    selectedDate: '',
+    selectedBranch: {}
   }),
   actions: {
     setSlots(slots) {
@@ -11,6 +12,9 @@ export const useStore = defineStore('main', {
     },
     setSelectedDate(date) {
       this.selectedDate = date
+    },
+    setSelectedBranch(branchName) {
+      this.selectedBranch = branchName
     }
   }
 })

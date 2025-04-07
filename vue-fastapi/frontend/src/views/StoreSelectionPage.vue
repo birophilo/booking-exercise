@@ -5,8 +5,17 @@
     </div>
     <h2>Book an eye test</h2>
     <div class="branch-selection-container">
-      <div v-for="branch in branchList" :key="branch.name" class="branch-card" @click="selectBranch(branch)">
-        <img :src="getImagePath(branch.image)" :alt="branch.name" class="branch-image" />
+      <div
+        v-for="branch in branchList"
+        :key="branch.name"
+        class="branch-card"
+        @click="selectBranch(branch)"
+      >
+        <img
+          :src="getImagePath(branch.image)"
+          :alt="branch.name"
+          class="branch-image"
+        />
         <div class="branch-name">{{ branch.name }}</div>
         <div class="branch-address">{{ branch.address }}</div>
         <div class="branch-postcode">{{ branch.postcode }}</div>
@@ -18,11 +27,13 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from '../store'
 import storeDetails from '../storeDetails.json'
 import logo from '../assets/logo.png'
 
 export default {
   setup() {
+    const store = useStore()
     const router = useRouter()
     const branchList = ref([])
 
@@ -38,6 +49,7 @@ export default {
       // Store the selected branch in localStorage for use in other components
       localStorage.setItem('selectedBranch', JSON.stringify(branch))
       // Navigate to the booking page
+      store.setSelectedBranch(branch)
       router.push('/booking')
     }
 

@@ -4,6 +4,51 @@ const API_URL = import.meta.env.VITE_CAL_API_URL
 
 const BACKEND_BASE_URL = 'http://localhost:8000'
 
+const EYE_TEST_LENGTH_MINUTES = 20
+
+const dataForBookingResponse = {
+  "name": "",
+  "email": "",
+  "smsReminderNumber": "",
+  "location": {
+    "value": "userPhone",
+    "optionValue": ""
+  }
+}
+
+const bookingPayload = {
+  "start": "",
+  "end": "",
+  "responses": {},
+  "timeZone": "Europe/London",
+  "language": "en",
+  "title": "",
+  "description": null,
+  "status": "PENDING",
+  "metadata": {}
+}
+
+function createBookingPayload({
+  startTime, name, email, location
+}) {
+  const payload = {...bookingPayload}
+
+  let endTime = new Date(startTime)
+  endTime.setMinutes(endTime.getMinutes() + EYE_TEST_LENGTH_MINUTES)
+
+  payload.start = startTime
+  payload.end = endTime
+  payload.title = `Cubitts eye test at: ${location}`
+
+  const dataForResponses = {...dataForBookingResponse}
+
+  dataForResponses.name = name
+  dataForResponses.email = email
+
+  payload.responses = dataForResponses
+
+  return payload
+}
 
 const headers = {
   'Authorization': `Bearer ${API_KEY}`,
@@ -44,17 +89,13 @@ export const calApi = {
   },
 
   async createBooking(bookingData) {
+    const bookingPayload = createBookingPayload(bookingData)
+    console.log(JSON.stringify(bookingPayload))
     try {
-      const response = await fetch(`${API_URL}/bookings`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/bookings`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({
-          userId: USER_ID,
-          startTime: bookingData.startTime,
-          endTime: bookingData.endTime,
-          name: bookingData.name,
-          email: bookingData.email
-        })
+        body: JSON.stringify(bookingPayload)
       })
 
       if (!response.ok) {

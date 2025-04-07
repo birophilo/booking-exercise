@@ -9,6 +9,10 @@ calcom_client = CalComApiClient()
 async def create_booking(request: Request):
     try:
         booking_data = await request.json()
+
+        # add event type (hard-coded here but will be specific to store/user)
+        booking_data['eventTypeId'] = 2211735
+
         response = calcom_client.create_booking(booking_data)
         return response
 

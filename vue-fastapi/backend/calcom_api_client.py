@@ -55,6 +55,10 @@ class CalComApiClient:
         # verify payload is a valid Booking
         assert Booking(**payload)
 
-        resp = requests.get(url, params=self.params, json=payload)
+        try:
+            resp = requests.post(url, params=self.params, json=payload)
+        except Exception as e:
+            print(e)
+
         resp.raise_for_status()
         return resp.json()

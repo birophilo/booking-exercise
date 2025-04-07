@@ -14,10 +14,20 @@
         v-for="slot in store.slots[store.selectedDate]"
         :key="slot.time"
         class="time-slot"
+        @click="openConfirmModal(slot)"
       >
         {{ formatSlotTime(slot.time) }}
       </button>
     </div>
+
+    <ConfirmModal
+      :is-open="showConfirmModal"
+      :date="store.selectedDate"
+      :time="selectedTimeSlot ? selectedTimeSlot.time : ''"
+      :location="selectedBranch ? selectedBranch.name : ''"
+      @close="closeConfirmModal"
+      @confirm="confirmTimeSlot"
+    />
 
     <!-- <TimeSlots :slots="store.slots" /> -->
   </div>
@@ -29,13 +39,15 @@ import { useRouter } from 'vue-router'
 import { useStore } from '../store.js'
 import { calApi } from '../services/calApi'
 import CalendarGrid from '../components/CalendarGrid.vue'
+import ConfirmModal from '../components/ConfirmModal.vue'
 // import TimeSlots from '../components/TimeSlots.vue'
 
 
 export default {
   name: 'BookingPage',
   components: {
-    CalendarGrid
+    CalendarGrid,
+    ConfirmModal
   },
   setup() {
     const store = useStore()
@@ -46,6 +58,8 @@ export default {
     const loading = ref(false)
     const error = ref('')
     const submitting = ref(false)
+    const showConfirmModal = ref(false)
+    const selectedBranch = ref(null)
     const formData = reactive({
       name: '',
       email: ''
@@ -88,8 +102,18 @@ export default {
       }
     }
 
-    const selectTimeSlot = (slot) => {
+    const openConfirmModal = (slot) => {
       selectedTimeSlot.value = slot
+      showConfirmModal.value = true
+    }
+
+    const closeConfirmModal = () => {
+      showConfirmModal.value = false
+    }
+
+    const confirmTimeSlot = () => {
+      submitBooking()
+      closeConfirmModal()
     }
 
     const submitBooking = async () => {
@@ -98,20 +122,28 @@ export default {
       submitting.value = true
       try {
         const bookingData = {
-          startTime: selectedTimeSlot.value.startTime,
-          endTime: selectedTimeSlot.value.endTime,
-          name: formData.name,
-          email: formData.email
+          startTime: selectedTimeSlot.value.time,
+          // name: formData.name,
+          // email: formData.email
+          name: 'Andrew Beales',
+          email: 'andrewbeales@gmail.com',
+          location: `Cubitts ${store.selectedBranch.name}, ${store.selectedBranch.location}`
         }
 
         const booking = await calApi.createBooking(bookingData)
         
+        console.log("RESPONSE")
+        console.log(booking)
+
         // Store booking details in localStorage for the confirmation page
-        localStorage.setItem('lastBooking', JSON.stringify({
-          date: selectedDate.value,
+        localStorage.setItem('cubittsLastBooking', JSON.stringify({
+          date: selectedDate.value.time,
           time: selectedTimeSlot.value.time,
-          name: formData.name,
-          email: formData.email
+          name: 'Andrew Beales',
+          email: 'andrewbeales@gmail.com',
+          // name: formData.name,
+          // email: formData.email,
+          location: `Cubitts ${store.selectedBranch.name}, ${store.selectedBranch.location}`
         }))
 
         router.push('/confirmation')
@@ -125,6 +157,12 @@ export default {
 
     onMounted(async () => {
       await fetchTimeSlots()
+
+      // Get the selected branch from localStorage
+      const storedBranch = localStorage.getItem('selectedBranch')
+      if (storedBranch) {
+        selectedBranch.value = JSON.parse(storedBranch)
+      }
     })
 
     return {
@@ -139,9 +177,13 @@ export default {
       formData,
       minDate,
       fetchTimeSlots,
-      selectTimeSlot,
+      openConfirmModal,
+      closeConfirmModal,
+      confirmTimeSlot,
       submitBooking,
-      handleDateSelected
+      handleDateSelected,
+      showConfirmModal,
+      selectedBranch
     }
   }
 }

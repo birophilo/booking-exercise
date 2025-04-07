@@ -5,7 +5,7 @@
   "responses": {
     "name": "Hello Hello",
     "email": "hello@gmail.com",
-    "smsReminderNumber": null,
+    "smsReminderNumber": "",
     "location": {
       "value": "userPhone",
       "optionValue": ""
