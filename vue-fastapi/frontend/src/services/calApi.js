@@ -19,6 +19,7 @@ const dataForBookingResponse = {
 const bookingPayload = {
   "start": "",
   "end": "",
+  "storeName": "",
   "responses": {},
   "timeZone": "Europe/London",
   "language": "en",
@@ -29,7 +30,7 @@ const bookingPayload = {
 }
 
 function createBookingPayload({
-  startTime, name, email, location
+  startTime, name, email, storeName
 }) {
   const payload = {...bookingPayload}
 
@@ -39,6 +40,7 @@ function createBookingPayload({
   payload.start = startTime
   payload.end = endTime
   payload.title = `Cubitts eye test at: ${location}`
+  payload.storeName = storeName
 
   const dataForResponses = {...dataForBookingResponse}
 
@@ -56,18 +58,17 @@ const headers = {
 }
 
 export const calApi = {
-  async getSlots(date) {
+  async getSlots(storeName, date) {
     const params = new URLSearchParams();
 
-    const today = new Date()
     const weekLater = new Date()
-    weekLater.setDate(today.getDate() + 8)
+    weekLater.setDate(date.getDate() + 8)
 
 
-    params.append('startTime', today.toISOString().slice(0, 10))
+    params.append('startTime', date.toISOString().slice(0, 10))
     params.append('endTime', weekLater.toISOString().slice(0, 10))
     params.append('timeZone', 'Europe/London')
-    params.append('eventTypeId', 2211735)
+    params.append('storeName', storeName)
 
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/slots?${params.toString()}`, {
@@ -90,7 +91,6 @@ export const calApi = {
 
   async createBooking(bookingData) {
     const bookingPayload = createBookingPayload(bookingData)
-    console.log(JSON.stringify(bookingPayload))
     try {
       const response = await fetch(`${BACKEND_BASE_URL}/bookings`, {
         method: 'POST',

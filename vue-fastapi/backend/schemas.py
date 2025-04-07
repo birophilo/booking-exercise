@@ -14,7 +14,6 @@ class Responses(BaseModel):
 
 
 class Booking(BaseModel):
-    event_type_id: int
     start: str
     end: str
     responses: Responses

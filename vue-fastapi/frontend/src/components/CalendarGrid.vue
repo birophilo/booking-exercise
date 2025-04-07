@@ -56,7 +56,11 @@
     </div>
     
     <div class="calendar-body">
-      <div v-for="(week, weekIndex) in calendarWeeks" :key="weekIndex" class="calendar-week">
+      <div
+        v-for="(week, weekIndex) in calendarWeeks"
+        :key="weekIndex"
+        class="calendar-week"
+      >
         <button
           v-for="(day, dayIndex) in week" 
           :key="dayIndex" 
@@ -80,6 +84,7 @@
 // import dayjs from 'dayjs'
 import { ref, computed } from 'vue'
 import { useStore } from '../store'
+import { formatDateToYYYYMMDD } from '../utils.js'
 
 const store = useStore()
 // Reactive state
@@ -153,20 +158,6 @@ const calendarWeeks = computed(() => {
 
 // METHODS
 
-function formatDateToYYYYMMDD(date) {
-  const [day, month, year] = new Intl.DateTimeFormat('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    timeZone: 'Europe/London',
-  }).formatToParts(date).reduce((acc, part) => {
-    if (part.type !== 'literal') acc.push(part.value);
-    return acc;
-  }, []);
-
-  return `${year}-${month}-${day}`;
-}
-
 const isCurrentDay = (day) => {
   if (!day) return false
   
@@ -192,6 +183,7 @@ const isSelectedDay = (day) => {
 const selectDay = (day) => {
   selectedDate.value = day
   store.setSelectedDate(formatDateToYYYYMMDD(day))
+  emit('date-selected', day)
 }
 
 const previousMonth = () => {

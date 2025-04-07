@@ -6,23 +6,59 @@
         <button class="close-button" @click="closeModal">&times;</button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to book an appointment for:</p>
+        <p>You are booking an appointment for:</p>
         <div class="appointment-details">
-          <p class="date">{{ formatDate(date) }}</p>
-          <p class="time">{{ formatTime(time) }}</p>
-          <p class="location">{{ location }}</p>
+          <p class="date">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
+          <p class="location">
+            Cubitts {{ store.selectedBranch.name }}
+          </p>
+          <p class="location">
+            {{ store.selectedBranch.address }},
+            {{ store.selectedBranch.postcode }}.
+          </p>
+        </div>
+
+        <div class="form-container">
+          <div class="form-group">
+            <!-- <label for="name">Your Name</label> -->
+            <input
+              type="text"
+              id="name"
+              v-model="formData.name"
+              placeholder="Full name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <!-- <label for="email">Email Address</label> -->
+            <input
+              type="email"
+              id="email"
+              v-model="formData.email"
+              placeholder="Email address"
+              required
+            />
+          </div>
         </div>
       </div>
       <div class="modal-footer">
         <button class="cancel-button" @click="closeModal">Cancel</button>
-        <button class="confirm-button" @click="confirm">Confirm</button>
+        <button
+          class="confirm-button"
+          @click="confirm"
+          :disabled="!isFormValid"
+        >
+          Confirm
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, ref, computed } from 'vue'
+import { useStore } from '../store'
 
 export default {
   name: 'ConfirmModal',
@@ -42,16 +78,25 @@ export default {
     location: {
       type: String,
       default: ''
+    },
+    formData: {
+      type: Object,
+      required: true
     }
   },
-  emits: ['close', 'confirm'],
+  emits: ['close', 'confirm', 'update:formData'],
   setup(props, { emit }) {
+
+    const store = useStore()
+
     const closeModal = () => {
       emit('close')
     }
 
     const confirm = () => {
-      emit('confirm')
+      if (isFormValid.value) {
+        emit('confirm')
+      }
     }
 
     const formatDate = (dateString) => {
@@ -74,11 +119,19 @@ export default {
       })
     }
 
+    const isFormValid = computed(() => {
+      return props.formData.name && props.formData.email &&
+             props.formData.email.includes('@') &&
+             props.formData.email.includes('.')
+    })
+
     return {
+      store,
       closeModal,
       confirm,
       formatDate,
-      formatTime
+      formatTime,
+      isFormValid
     }
   }
 }
@@ -160,6 +213,35 @@ export default {
   font-size: 0.9rem;
 }
 
+.form-container {
+  margin-top: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -192,7 +274,12 @@ export default {
   color: white;
 }
 
-.confirm-button:hover {
+.confirm-button:hover:not(:disabled) {
   background-color: #2563eb;
+}
+
+.confirm-button:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
 }
 </style> 

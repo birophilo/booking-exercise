@@ -16,47 +16,41 @@ CALCOM_API_V1_BASE_URL = 'https://api.cal.com/v1'
 # unique API key, so no username or ID is required by cal.com to
 # retrieve the correct user, only the API key.
 
-# USER_API_KEYS = {
-#     'borough': BOROUGH_API_KEY,
-#     'knightsbridge': KNIGHTSBRIDGE_API_KEY
-# }
-
-# def get_schedule_for_user(user, date: str):
-#     params = {
-#         'apiKey': USER_API_KEYS[user],
-#         'date': date
-#     }
-#     url = f'{CALCOM_API_V1_BASE_URL}/bookings'
-#     resp = requests.get(url, params=params)
-
 
 class CalComApiClient:
+    """
+    NOTE: each user can only have one schedule, so each store is
+    represented by a unique user account. Each user is assigned a
+    unique API key, so no username or ID is required by cal.com to
+    retrieve the correct user, only the API key.
+    """
+
     def __init__(self, API_KEY=api_key, BASE_URL='https://api.cal.com/v1'):
         self.base_url = BASE_URL
-        self.params = {'apiKey': API_KEY}
 
         if API_KEY is None:
             raise ValueError('The Cal.com API key could not be imported')
 
-    def get_slots(self, params):
+    def get_slots(self, params, api_key: str):
         url = f'{self.base_url}/slots'
 
         # verify necessary query parameters are present
         assert SlotParams(**params)
-        params.update(self.params)
+        params['apiKey'] = api_key
 
         resp = requests.get(url, params=params)
         resp.raise_for_status()
         return resp.json()
 
-    def create_booking(self, payload):
+    def create_booking(self, payload, api_key: str):
         url = f'{self.base_url}/bookings'
+        params = {'apiKey': api_key}
 
         # verify payload is a valid Booking
         assert Booking(**payload)
 
         try:
-            resp = requests.post(url, params=self.params, json=payload)
+            resp = requests.post(url, params=params, json=payload)
         except Exception as e:
             print(e)
 

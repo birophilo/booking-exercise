@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Request
 from calcom_api_client import CalComApiClient
 
+from store_details import CALCOM_STORE_DETAILS
+
 route = APIRouter()
 calcom_client = CalComApiClient()
 
@@ -10,10 +12,19 @@ async def create_booking(request: Request):
     try:
         booking_data = await request.json()
 
-        # add event type (hard-coded here but will be specific to store/user)
-        booking_data['eventTypeId'] = 2211735
+        store = booking_data['storeName']
+        del booking_data['storeName']
 
-        response = calcom_client.create_booking(booking_data)
+        # retrieve event type ID specific to store/"user" in cal.com
+        event_type_id = CALCOM_STORE_DETAILS[store.lower()]['event_type_id']
+        api_key_for_user = CALCOM_STORE_DETAILS[store.lower()]['api_key']
+
+        booking_data['eventTypeId'] = event_type_id
+
+        response = calcom_client.create_booking(
+            payload=booking_data,
+            api_key=api_key_for_user
+        )
         return response
 
     except ValueError as e:

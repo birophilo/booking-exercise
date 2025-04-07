@@ -3,7 +3,10 @@
 
     <h2>Select a Date and Time</h2>
 
-    <CalendarGrid @date-selected="handleDateSelected" />
+    <CalendarGrid
+      @date-selected="handleDateSelected"
+      @fetch-slots-for-week=""
+    />
 
     <!-- <div class="calendar-section">
       <button @click="fetchTimeSlots">fetch slots</button>
@@ -25,6 +28,7 @@
       :date="store.selectedDate"
       :time="selectedTimeSlot ? selectedTimeSlot.time : ''"
       :location="selectedBranch ? selectedBranch.name : ''"
+      :form-data="formData"
       @close="closeConfirmModal"
       @confirm="confirmTimeSlot"
     />
@@ -38,6 +42,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '../store.js'
 import { calApi } from '../services/calApi'
+import { formatDateToYYYYMMDD, getStartOfWeek } from '../utils.js'
 import CalendarGrid from '../components/CalendarGrid.vue'
 import ConfirmModal from '../components/ConfirmModal.vue'
 // import TimeSlots from '../components/TimeSlots.vue'
@@ -78,20 +83,25 @@ export default {
     })
 
     const handleDateSelected = (date) => {
-      // Handle the selected date, e.g., fetch available time slots
+      // Fetch available time slots
       selectedDate.value = date
-      console.log('Selected date:', date)
+      const fetchedDates = Object.keys(store.slots)
+      // If selected date not already fetched, fetch that week's slots
+      if (!fetchedDates.includes(formatDateToYYYYMMDD(date))) {
+        const fetchDate = getStartOfWeek(date)
+        fetchTimeSlots(fetchDate)
+      }
     }
 
-    const fetchTimeSlots = async () => {
-      // if (!selectedDate.value) return
+    const fetchTimeSlots = async (date) => {
 
       loading.value = true
       error.value = ''
       timeSlots.value = []
 
       try {
-        const slots = await calApi.getSlots('2025-04-07')
+
+        const slots = await calApi.getSlots(store.selectedBranch.name, date)
         store.setSlots(slots)
         timeSlots.value = slots
       } catch (err) {
@@ -123,27 +133,20 @@ export default {
       try {
         const bookingData = {
           startTime: selectedTimeSlot.value.time,
-          // name: formData.name,
-          // email: formData.email
-          name: 'Andrew Beales',
-          email: 'andrewbeales@gmail.com',
-          location: `Cubitts ${store.selectedBranch.name}, ${store.selectedBranch.location}`
+          name: formData.name,
+          email: formData.email,
+          storeName: store.selectedBranch.name
         }
 
         const booking = await calApi.createBooking(bookingData)
-        
-        console.log("RESPONSE")
-        console.log(booking)
 
         // Store booking details in localStorage for the confirmation page
         localStorage.setItem('cubittsLastBooking', JSON.stringify({
           date: selectedDate.value.time,
           time: selectedTimeSlot.value.time,
-          name: 'Andrew Beales',
-          email: 'andrewbeales@gmail.com',
-          // name: formData.name,
-          // email: formData.email,
-          location: `Cubitts ${store.selectedBranch.name}, ${store.selectedBranch.location}`
+          name: formData.name,
+          email: formData.email,
+          storeName: `${store.selectedBranch.name}`
         }))
 
         router.push('/confirmation')
@@ -156,7 +159,8 @@ export default {
     }
 
     onMounted(async () => {
-      await fetchTimeSlots()
+      const today = new Date()
+      await fetchTimeSlots(today)
 
       // Get the selected branch from localStorage
       const storedBranch = localStorage.getItem('selectedBranch')
