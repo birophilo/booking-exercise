@@ -5,6 +5,7 @@ import App from './App.vue'
 import StoreSelectionPage from './views/StoreSelectionPage.vue'
 import BookingPage from './views/BookingPage.vue'
 import ConfirmationPage from './views/ConfirmationPage.vue'
+import './assets/main.css'
 
 const router = createRouter({
   history: createWebHistory(),

@@ -3,7 +3,7 @@
     <div class="logo-container">
       <img :src="logo" alt="CUBITTS Logo" class="logo-image" />
     </div>
-    <h2>Book an eye test</h2>
+    <h2 class="text-2xl font-bold text-gray-200 mb-8">Book an eye test</h2>
     <div class="branch-selection-container">
       <div
         v-for="branch in branchList"
@@ -78,22 +78,6 @@ export default {
 .logo-image {
   max-width: 200px;
   height: auto;
-}
-
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-h2 {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  color: #666;
-}
-
-h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
 }
 
 .branch-selection-container {
