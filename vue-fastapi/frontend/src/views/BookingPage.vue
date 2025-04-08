@@ -1,20 +1,27 @@
 <template>
-  <div class="booking-page">
+  <div class="flex flex-col max-w-7xl mx-auto p-8">
+    <h2 class="text-2xl font-medium text-gray-700 mb-8">Select a Date and Time</h2>
 
-    <h2>Select a Date and Time</h2>
-
-    <CalendarGrid @date-selected="handleDateSelected" />
-
-    <div v-if="showTimeSlots">
-      <div v-if="loadingTimeSlots" class="loading-container">
-        <div class="spinner"></div>
-        <p>Loading available time slots...</p>
+    <div class="flex flex-col lg:flex-row lg:gap-8">
+      <!-- Calendar Section -->
+      <div class="w-full lg:w-1/2">
+        <CalendarGrid @date-selected="handleDateSelected" />
       </div>
-      <div v-else>
-        <TimeSlotContainer
-          :slots="store.slots[store.selectedDate] || []"
-          @select-slot="openConfirmModal"
-        />
+
+      <!-- Time Slots Section -->
+      <div class="w-full lg:w-1/2 mt-8 lg:mt-0">
+        <div v-if="showTimeSlots">
+          <div v-if="loadingTimeSlots" class="flex flex-col items-center justify-center my-8">
+            <div class="w-10 h-10 border-4 border-gray-200 rounded-full border-t-gray-700 animate-spin mb-4"></div>
+            <p class="text-gray-600">Loading available time slots...</p>
+          </div>
+          <div v-else>
+            <TimeSlotContainer
+              :slots="store.slots[store.selectedDate] || []"
+              @select-slot="openConfirmModal"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -183,64 +190,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-.booking-page {
-  display: flex;
-  flex-direction: column;
-}
-
-.calendar-section {
-  padding: 1rem;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 2rem 0;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #333;
-  animation: spin 1s ease-in-out infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.time-slot-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.1rem;
-  margin-top: 1.5rem;
-}
-
-.time-slot {
-  background-color: #f0f0f0;
-  border: none;
-  width: 6rem;
-  height: 3rem;
-  padding: 0.5rem;
-  margin: 0.25rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #333;
-  transition: background-color 0.1s ease;
-}
-
-.time-slot:hover {
-  background-color: #e0e0e0;
-}
-</style> 

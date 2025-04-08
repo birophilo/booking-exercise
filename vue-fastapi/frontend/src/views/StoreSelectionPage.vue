@@ -1,24 +1,23 @@
 <template>
-  <div class="selection-page">
-    <div class="logo-container">
-      <img :src="logo" alt="CUBITTS Logo" class="logo-image" />
+  <div class="max-w-7xl mx-auto p-8 text-center">
+    <div class="mb-6">
+      <img :src="logo" alt="CUBITTS Logo" class="max-w-[200px] h-auto mx-auto" />
     </div>
-    <h2 class="text-2xl font-bold text-gray-200 mb-8">Book an eye test</h2>
-    <div class="branch-selection-container">
+    <h2 class="text-2xl font-medium text-gray-600 mb-8">Book an eye test</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
       <div
         v-for="branch in branchList"
         :key="branch.name"
-        class="branch-card"
+        class="border border-gray-200 rounded-lg overflow-hidden cursor-pointer bg-white"
         @click="selectBranch(branch)"
       >
         <img
           :src="getImagePath(branch.image)"
           :alt="branch.name"
-          class="branch-image"
+          class="w-full h-[180px] object-cover"
         />
-        <div class="branch-name">{{ branch.name }}</div>
-        <div class="branch-address">{{ branch.address }}</div>
-        <div class="branch-postcode">{{ branch.postcode }}</div>
+        <div class="text-xl font-medium mt-2 px-4">{{ branch.name }}</div>
+        <div class="px-4 mb-4 font-light text-gray-600">{{ branch.address }}, {{ branch.postcode }}</div>
       </div>
     </div>
   </div>
@@ -62,66 +61,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.selection-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo-container {
-  margin-bottom: 1.5rem;
-}
-
-.logo-image {
-  max-width: 200px;
-  height: auto;
-}
-
-.branch-selection-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.branch-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  background-color: white;
-}
-
-.branch-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.branch-image {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.branch-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 1rem 0 0.5rem;
-  padding: 0 1rem;
-}
-
-.branch-address, .branch-postcode {
-  padding: 0 1rem;
-  margin-bottom: 0.5rem;
-  color: #666;
-}
-
-.branch-postcode {
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-</style>

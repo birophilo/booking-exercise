@@ -1,9 +1,9 @@
 <template>
-  <div class="calendar-grid">
-    <div class="calendar-header">
-      <div class="month-navigation">
+  <div class="w-full border overflow-hidden bg-white shadow-sm">
+    <div class="bg-gray-50">
+      <div class="flex justify-center items-center py-3">
         <button 
-          class="nav-button" 
+          class="flex items-center justify-center w-8 h-8 transition-all duration-200 mx-5 border-none hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           @click="previousMonth" 
           aria-label="Previous month"
           :disabled="isCurrentMonth"
@@ -18,15 +18,15 @@
             stroke-width="2" 
             stroke-linecap="round" 
             stroke-linejoin="round" 
-            class="lucide lucide-chevron-left w-5 h-5"
+            class="w-5 h-5"
             :class="{ 'opacity-50': isCurrentMonth }"
           >
             <path d="m15 18-6-6 6-6"></path>
           </svg>
         </button>
-        <h3 class="text-xl font-medium">{{ currentMonthName }} {{ currentYear }}</h3>
+        <h3 class="text-lg font-extralight text-purple-500">{{ currentMonthName }} {{ currentYear }}</h3>
         <button 
-          class="nav-button" 
+          class="flex items-center justify-center w-8 h-8 transition-all duration-200 mx-5 border-none hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           @click="nextMonth" 
           aria-label="Next month"
           :disabled="isNextMonth"
@@ -41,7 +41,7 @@
             stroke-width="2" 
             stroke-linecap="round" 
             stroke-linejoin="round" 
-            class="lucide lucide-chevron-right w-5 h-5"
+            class="w-5 h-5"
           >
             <path d="m9 18 6-6-6-6"></path>
           </svg>
@@ -49,27 +49,27 @@
       </div>
     </div>
     
-    <div class="calendar-days">
-      <div v-for="day in daysOfWeek" :key="day" class="day-header">
+    <div class="grid grid-cols-7">
+      <div v-for="day in daysOfWeek" :key="day" class="p-2 text-center font-bold text-xs m-0.5 tracking-wider text-white bg-purple-200">
         {{ day.toUpperCase() }}
       </div>
     </div>
     
-    <div class="calendar-body">
+    <div class="flex flex-col">
       <div
         v-for="(week, weekIndex) in calendarWeeks"
         :key="weekIndex"
-        class="calendar-week"
+        class="grid grid-cols-7"
       >
         <button
           v-for="(day, dayIndex) in week" 
           :key="dayIndex" 
-          class="calendar-day"
+          class="text-center text-2x1 font-black cursor-pointer m-0.5 h-12 border-none transition-colors duration-100 disabled:cursor-default"
           :disabled="isPastDay(day)"
           :class="{
-            'empty-day': !day || isPastDay(day),
-            'current-day': isCurrentDay(day),
-            'selected-day': isSelectedDay(day)
+            'cursor-default text-gray-300 bg-gray-100': !day || isPastDay(day),
+            'bg-purple-300 text-white hover:bg-purple-400': day && !isPastDay(day) && !isCurrentDay(day) && !isSelectedDay(day),
+            'bg-purple-600 text-white hover:bg-purple-600': isSelectedDay(day)
           }"
           @click="day && selectDay(day)"
         >
@@ -201,104 +201,3 @@ const nextMonth = () => {
 
 const emit = defineEmits(['date-selected', 'month-changed'])
 </script>
-
-<style scoped>
-.calendar-grid {
-  width: 100%;
-  border: 1px solid #fff;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.calendar-header {
-  border-bottom: 1px solid #fff;
-}
-
-.month-navigation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.nav-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  transition: all 0.2s;
-  margin: 0 20px;
-  border: none;
-}
-
-.nav-button:hover:not(:disabled) {
-  background-color: #e2e8f0;
-  color: #1e293b;
-}
-
-.nav-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  background-color: #fff;
-}
-
-.day-header {
-  padding: 0.5rem;
-  text-align: center;
-  font-weight: 500;
-  font-size: 0.7rem;
-  letter-spacing: 0.5px;
-  color: black;
-}
-
-.calendar-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.calendar-week {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  border-bottom: 1px solid #fff;
-}
-
-.calendar-week:last-child {
-  border-bottom: none;
-}
-
-.calendar-day {
-  text-align: center;
-  font-size: 1rem;
-  cursor: pointer;
-  margin: 3px;
-  height: 50px;
-  border: none;
-}
-
-.calendar-day:hover:not(.empty-day) {
-  background-color: #f1f5f9;
-}
-
-.empty-day {
-  cursor: default;
-}
-
-.current-day {
-  font-weight: bold;
-  color: #3b82f6;
-}
-
-.selected-day {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.selected-day:hover {
-  background-color: #2563eb;
-}
-</style> 
