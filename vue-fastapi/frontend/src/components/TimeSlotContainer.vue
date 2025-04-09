@@ -1,9 +1,13 @@
 <template>
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-6">
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5 mt-3">
     <button
       v-for="slot in slots"
       :key="slot.time"
-      class="bg-gray-100 border-none w-full h-12 p-2 rounded cursor-pointer text-base text-gray-800 transition-colors hover:bg-gray-200"
+      class="border-none w-full h-12 p-2 cursor-pointer font-light text-gray-800 transition-colors hover:bg-orange-400"
+      :class="{
+        'bg-orange-400': slot === selectedSlot,
+        'bg-orange-200': slot !== selectedSlot
+    }"
       @click="selectTimeSlot(slot)"
     >
       {{ formatSlotTime(slot.time) }}
@@ -12,6 +16,7 @@
 </template>
 
 <script>
+import { ref } from 'vue'
 
 export default {
   name: 'TimeSlotContainer',
@@ -24,6 +29,9 @@ export default {
   },
   emits: ['select-slot'],
   setup(props, { emit }) {
+
+    const selectedSlot = ref(null)
+
     const formatSlotTime = (dateString) => {
       return new Date(dateString).toLocaleTimeString([], {
         hour: '2-digit',
@@ -32,12 +40,15 @@ export default {
     }
 
     const selectTimeSlot = (slot) => {
+      selectedSlot.value = slot
       emit('select-slot', slot)
     }
 
+
     return {
       formatSlotTime,
-      selectTimeSlot
+      selectTimeSlot,
+      selectedSlot
     }
   }
 }

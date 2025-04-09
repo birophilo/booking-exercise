@@ -1,6 +1,7 @@
 <template>
-  <div class="w-full border overflow-hidden bg-white shadow-sm">
-    <div class="bg-gray-50">
+  <div class="w-full overflow-hidden bg-white">
+    <h2 class="text-2xl font-light text-gray-800 mb-3 ml-2">Choose a date</h2>
+    <div class="bg-slate-100">
       <div class="flex justify-center items-center py-3">
         <button 
           class="flex items-center justify-center w-8 h-8 transition-all duration-200 mx-5 border-none hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
@@ -24,7 +25,7 @@
             <path d="m15 18-6-6 6-6"></path>
           </svg>
         </button>
-        <h3 class="text-lg font-extralight text-purple-500">{{ currentMonthName }} {{ currentYear }}</h3>
+        <h3 class="text-lg font-extralight text-amber-500">{{ currentMonthName }} {{ currentYear }}</h3>
         <button 
           class="flex items-center justify-center w-8 h-8 transition-all duration-200 mx-5 border-none hover:bg-gray-200 hover:text-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           @click="nextMonth" 
@@ -50,7 +51,7 @@
     </div>
     
     <div class="grid grid-cols-7">
-      <div v-for="day in daysOfWeek" :key="day" class="p-2 text-center font-bold text-xs m-0.5 tracking-wider text-white bg-purple-200">
+      <div v-for="day in daysOfWeek" :key="day" class="p-2 text-center font-bold text-xs m-0.5 tracking-wider text-stone-500 bg-slate-100">
         {{ day.toUpperCase() }}
       </div>
     </div>
@@ -64,12 +65,12 @@
         <button
           v-for="(day, dayIndex) in week" 
           :key="dayIndex" 
-          class="text-center text-2x1 font-black cursor-pointer m-0.5 h-12 border-none transition-colors duration-100 disabled:cursor-default"
+          class="text-center text-lg font-light cursor-pointer m-0.5 h-12 border-none transition-colors duration-100 disabled:cursor-default"
           :disabled="isPastDay(day)"
           :class="{
-            'cursor-default text-gray-300 bg-gray-100': !day || isPastDay(day),
-            'bg-purple-300 text-white hover:bg-purple-400': day && !isPastDay(day) && !isCurrentDay(day) && !isSelectedDay(day),
-            'bg-purple-600 text-white hover:bg-purple-600': isSelectedDay(day)
+            'cursor-default text-stone-300 bg-slate-100 font-light': !day || isPastDay(day),
+            'bg-orange-400 text-stone-100 hover:bg-amber-600': day && !isPastDay(day) && !isCurrentDay(day) && !isSelectedDay(day),
+            'bg-amber-800 text-stone-100 hover:bg-amber-800': isSelectedDay(day)
           }"
           @click="day && selectDay(day)"
         >

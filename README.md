@@ -20,10 +20,25 @@ It uses **Vue.js** rather than **React**, but the component structure, rendering
 
 
 
+Clone repo
+
 ```bash
-# download git repo
-# cd repo
-# docker-compose up --build
+$ git clone git@github.com:birophilo/booking-exercise.git
+```
+
+
+
+**Add API keys**
+
+API keys for cal.com "stores" (users) will be supplied separately. These need to be saved in a file called `.env` and the file placed inside the `/vue-fastapi/backend` directory, before building the Docker containers.
+
+
+
+**Run Docker containers**
+
+```bash
+$ cd vue-fastapi
+$ docker-compose up --build
 ```
 
 

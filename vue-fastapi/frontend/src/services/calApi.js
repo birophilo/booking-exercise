@@ -1,6 +1,7 @@
 const BACKEND_BASE_URL = 'http://localhost:8000'
 
 const EYE_TEST_LENGTH_MINUTES = 20
+const FETCH_SLOT_DAYS = 7
 
 const dataForBookingResponse = {
   "name": "",
@@ -57,10 +58,7 @@ export const calApi = {
     const params = new URLSearchParams();
 
     const weekLater = new Date(date)
-    weekLater.setDate(date.getDate() + 8)
-
-
-
+    weekLater.setDate(date.getDate() + (FETCH_SLOT_DAYS + 1))
 
     params.append('startTime', date.toISOString().slice(0, 10))
     params.append('endTime', weekLater.toISOString().slice(0, 10))
@@ -78,7 +76,6 @@ export const calApi = {
       }
 
       const data = await response.json()
-      console.log(data)
       return data
     } catch (error) {
       console.error('Error fetching availability:', error)

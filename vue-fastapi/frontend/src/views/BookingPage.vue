@@ -1,8 +1,7 @@
 <template>
-  <div class="flex flex-col max-w-7xl mx-auto p-8">
-    <h2 class="text-2xl font-medium text-gray-700 mb-8">Select a Date and Time</h2>
-
+  <div class="flex flex-col max-w-7xl mx-auto p-4 sm:p-4 md:p-8">
     <div class="flex flex-col lg:flex-row lg:gap-8">
+
       <!-- Calendar Section -->
       <div class="w-full lg:w-1/2">
         <CalendarGrid @date-selected="handleDateSelected" />
@@ -11,11 +10,21 @@
       <!-- Time Slots Section -->
       <div class="w-full lg:w-1/2 mt-8 lg:mt-0">
         <div v-if="showTimeSlots">
-          <div v-if="loadingTimeSlots" class="flex flex-col items-center justify-center my-8">
+          <div
+            v-if="loadingTimeSlots"
+            class="flex flex-col items-center justify-center my-8"
+          >
             <div class="w-10 h-10 border-4 border-gray-200 rounded-full border-t-gray-700 animate-spin mb-4"></div>
             <p class="text-gray-600">Loading available time slots...</p>
           </div>
+          <div v-else-if="store.selectedDate && !store.slots[store.selectedDate]">
+            <p class="text-center">Sorry, no bookings available on<br />{{ formatDateWithOrdinal(store.selectedDate) }}</p>
+          </div>
           <div v-else>
+            <h2
+              v-if="showTimeSlots && store.selectedDate"
+              class="text-2xl font-light text-gray-800 mb-3 ml-2"
+            >Choose a time on {{ formatDateWithOrdinal(store.selectedDate) }}</h2>
             <TimeSlotContainer
               :slots="store.slots[store.selectedDate] || []"
               @select-slot="openConfirmModal"
@@ -60,7 +69,7 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
-    const selectedDate = ref('2025-04-07')
+    const selectedDate = ref(null)
     const selectedTimeSlot = ref(null)
     const loadingTimeSlots = ref(false)
     const showTimeSlots = ref(false)
@@ -161,6 +170,27 @@ export default {
       }
     }
 
+    const formatDateWithOrdinal = (dateString) => {
+      const date = new Date(dateString)
+      const day = date.getDate()
+      const month = date.toLocaleString('default', { month: 'long' })
+
+      // Add ordinal suffix
+      const ordinal = getOrdinalSuffix(day)
+
+      return `${day}${ordinal} ${month}`
+    }
+
+    const getOrdinalSuffix = (day) => {
+      if (day > 3 && day < 21) return 'th'
+      switch (day % 10) {
+        case 1: return 'st'
+        case 2: return 'nd'
+        case 3: return 'rd'
+        default: return 'th'
+      }
+    }
+
     onMounted(async () => {
       const today = new Date()
       await fetchTimeSlots(today)
@@ -185,7 +215,8 @@ export default {
       submitBooking,
       handleDateSelected,
       showConfirmModal,
-      selectedBranch
+      selectedBranch,
+      formatDateWithOrdinal
     }
   }
 }
