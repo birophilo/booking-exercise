@@ -1,21 +1,21 @@
 <template>
-  <div class="confirmation-page">
-    <div class="confirmation-card" v-if="store.bookingDetails">
-      <img :src="confirmationPageImage" width="100%" />
-      <h2>Booking Confirmed</h2>
-      <p>Your eye test has been booked for:</p>
-      <p>
+  <div class="max-w-7xl mx-auto p-8">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden max-w-2xl mx-auto p-6" v-if="store.bookingDetails">
+      <img :src="confirmationPageImage" class="w-full h-auto mb-6" />
+      <h2 class="text-2xl font-medium text-gray-800 mb-4">Booking Confirmed</h2>
+      <p class="text-gray-600 mb-2">Your eye test has been booked for:</p>
+      <p class="text-gray-800 font-medium mb-4">
         {{ formatDate(store.bookingDetails.date) }}<br />
         time: {{ formatTime(store.bookingDetails.date) }}
       </p>
-      <p>
+      <p class="text-gray-600 mb-6">
         Cubitts {{ store.bookingDetails.branch.name }}<br />
         {{ store.bookingDetails.branch.address }}, {{ store.bookingDetails.branch.postcode }}.
       </p>
-      <button class="new-booking-btn" @click="goToBooking">Return to booking page</button><br />
-      <button class="new-booking-btn" @click="goToBooking">Cubitts</button><br />
+      <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors mb-3 w-full" @click="goToBooking">Return to booking page</button>
+      <button class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors w-full" @click="goToHome">Cubitts</button>
     </div>
-    <div v-else class="error">
+    <div v-else class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-md max-w-2xl mx-auto">
       No booking details could be loaded. Please check your email for booking details.
     </div>
   </div>
@@ -51,14 +51,17 @@ export default {
     }
 
     const formatTime = (dateString) => {
-      return new Date(dateString).toLocaleTimeString('en-GB', {
+      return new Date(dateString).toLocaleTimeString('en-US', {
         hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
+        minute: '2-digit'
       })
     }
 
     const goToBooking = () => {
+      router.push('/booking')
+    }
+
+    const goToHome = () => {
       router.push('/')
     }
 
@@ -68,52 +71,9 @@ export default {
       confirmationPageImage,
       formatDate,
       formatTime,
-      goToBooking
+      goToBooking,
+      goToHome
     }
   }
 }
 </script>
-
-<style scoped>
-.confirmation-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-}
-
-.confirmation-card {
-  text-align: center;
-  background: white;
-  width: 100%;
-}
-
-.booking-details {
-  margin: 2rem 0;
-  text-align: left;
-  padding: 1rem;
-  background: #f8f8f8;
-  border-radius: 4px;
-}
-
-.booking-details p {
-  margin: 0.5rem 0;
-}
-
-.error {
-  color: #dc3545;
-  margin: 1rem 0;
-}
-
-.new-booking-btn {
-  padding: 0.2rem 0.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.new-booking-btn:hover {
-  background: #3aa876;
-}
-</style> 

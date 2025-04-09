@@ -1,56 +1,64 @@
 <template>
-  <div v-if="isOpen" class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
-      <div class="modal-header">
-        <h3>Confirm Appointment</h3>
-        <button class="close-button" @click="closeModal">&times;</button>
+  <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" @click="closeModal">
+    <div class="bg-white rounded-lg w-11/12 max-w-md shadow-lg overflow-hidden" @click.stop>
+      <div class="flex justify-between items-center p-4 border-b border-gray-200">
+        <h3 class="text-xl font-medium text-gray-800 m-0">Confirm Appointment</h3>
+        <button class="bg-transparent border-none text-2xl cursor-pointer text-gray-600 hover:text-gray-800 p-0 leading-none" @click="closeModal">&times;</button>
       </div>
-      <div class="modal-body">
-        <div v-if="submitting" class="loading-container">
-          <div class="spinner"></div>
+      <div class="p-6">
+        <div v-if="submitting" class="flex flex-col items-center justify-center py-8">
+          <div class="w-10 h-10 border-4 border-gray-200 rounded-full border-t-gray-800 animate-spin mb-4"></div>
           <p>Submitting your booking...</p>
         </div>
         <div v-else>
-          <div class="appointment-details">
-            <p class="date">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
-            <p class="location">
+          <div class="mt-4 p-4 bg-gray-50 rounded-md">
+            <p class="font-medium text-gray-800 my-2">{{ formatDate(date) }}, {{ formatTime(time) }}</p>
+            <p class="text-gray-600 text-sm my-2">
               Cubitts {{ store.selectedBranch.name }}
             </p>
-            <p class="location">
+            <p class="text-gray-600 text-sm my-2">
               {{ store.selectedBranch.address }},
               {{ store.selectedBranch.postcode }}.
             </p>
           </div>
 
-          <div class="form-container">
-            <div class="form-group">
-              <label for="name">please enter your full name</label>
+          <div class="mt-6">
+            <div class="mb-4">
+              <label for="name" class="block mb-2 font-medium text-gray-800">please enter your full name</label>
               <input
                 type="text"
                 id="name"
                 v-model="formData.name"
                 placeholder="name"
                 required
+                class="w-full p-3 border border-gray-300 rounded-md text-base transition-colors focus:outline-none focus:border-blue-500"
               />
             </div>
 
-            <div class="form-group">
-              <label for="email">your email address</label>
+            <div class="mb-4">
+              <label for="email" class="block mb-2 font-medium text-gray-800">your email address</label>
               <input
                 type="email"
                 id="email"
                 v-model="formData.email"
                 placeholder="email"
                 required
+                class="w-full p-3 border border-gray-300 rounded-md text-base transition-colors focus:outline-none focus:border-blue-500"
               />
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button class="cancel-button" @click="closeModal" :disabled="submitting">Cancel</button>
+      <div class="flex justify-end p-4 border-t border-gray-200 gap-4">
+        <button 
+          class="px-4 py-2 bg-gray-100 border border-gray-200 rounded-md text-gray-700 font-medium cursor-pointer transition-colors hover:bg-gray-200 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed" 
+          @click="closeModal" 
+          :disabled="submitting"
+        >
+          Cancel
+        </button>
         <button
-          class="confirm-button"
+          class="px-4 py-2 bg-blue-500 border-none rounded-md text-white font-medium cursor-pointer transition-colors hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
           @click="confirm"
           :disabled="!isFormValid || submitting"
         >
@@ -144,183 +152,4 @@ export default {
     }
   }
 }
-</script>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #eee;
-}
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  color: #333;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #666;
-  padding: 0;
-  line-height: 1;
-}
-
-.close-button:hover {
-  color: #333;
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #333;
-  animation: spin 1s ease-in-out infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.appointment-details {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: #f9f9f9;
-  border-radius: 4px;
-}
-
-.appointment-details p {
-  margin: 0.5rem 0;
-}
-
-.date, .time {
-  font-weight: 500;
-  color: #333;
-}
-
-.location {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.form-container {
-  margin-top: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #3b82f6;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #eee;
-  gap: 1rem;
-}
-
-.cancel-button {
-  padding: 0.5rem 1rem;
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
-  color: #4b5563;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.cancel-button:hover {
-  background-color: #e5e7eb;
-}
-
-.confirm-button {
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.confirm-button:hover {
-  background-color: #2563eb;
-}
-
-.confirm-button:disabled {
-  background-color: #93c5fd;
-  cursor: not-allowed;
-}
-
-.cancel-button:disabled {
-  background-color: #f3f4f6;
-  color: #9ca3af;
-  cursor: not-allowed;
-}
-</style> 
+</script> 

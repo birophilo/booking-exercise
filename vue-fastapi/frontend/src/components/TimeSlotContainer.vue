@@ -1,9 +1,9 @@
 <template>
-  <div class="time-slot-container">
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-6">
     <button
       v-for="slot in slots"
       :key="slot.time"
-      class="time-slot"
+      class="bg-gray-100 border-none w-full h-12 p-2 rounded cursor-pointer text-base text-gray-800 transition-colors hover:bg-gray-200"
       @click="selectTimeSlot(slot)"
     >
       {{ formatSlotTime(slot.time) }}
@@ -42,30 +42,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.time-slot-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.1rem;
-  margin-top: 1.5rem;
-}
-
-.time-slot {
-  background-color: #f0f0f0;
-  border: none;
-  width: 6rem;
-  height: 3rem;
-  padding: 0.5rem;
-  margin: 0.25rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #333;
-  transition: background-color 0.1s ease;
-}
-
-.time-slot:hover {
-  background-color: #e0e0e0;
-}
-</style> 
