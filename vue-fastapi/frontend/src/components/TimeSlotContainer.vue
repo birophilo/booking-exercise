@@ -6,7 +6,7 @@
       class="border-none w-full h-12 p-2 cursor-pointer font-light text-gray-800 transition-colors hover:bg-orange-400"
       :class="{
         'bg-orange-400': slot === selectedSlot,
-        'bg-orange-200': slot !== selectedSlot
+        'bg-orange-100': slot !== selectedSlot
     }"
       @click="selectTimeSlot(slot)"
     >
