@@ -1,7 +1,3 @@
-const API_KEY = import.meta.env.VITE_CAL_API_KEY
-const USER_ID = import.meta.env.VITE_CAL_USER_ID
-const API_URL = import.meta.env.VITE_CAL_API_URL
-
 const BACKEND_BASE_URL = 'http://localhost:8000'
 
 const EYE_TEST_LENGTH_MINUTES = 20
@@ -53,7 +49,6 @@ function createBookingPayload({
 }
 
 const headers = {
-  'Authorization': `Bearer ${API_KEY}`,
   'Content-Type': 'application/json'
 }
 
