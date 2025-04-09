@@ -20,7 +20,7 @@ It uses **Vue.js** rather than **React**, but the component structure, rendering
 
 
 
-Clone repo
+**Clone repo**
 
 ```bash
 $ git clone git@github.com:birophilo/booking-exercise.git
@@ -36,6 +36,8 @@ API keys for cal.com "stores" (users) will be supplied separately. These need to
 
 **Run Docker containers**
 
+Make sure Docker Desktop is installed and running on your machine. Then in the root directory:
+
 ```bash
 $ cd vue-fastapi
 $ docker-compose up --build
@@ -43,8 +45,10 @@ $ docker-compose up --build
 
 
 
-- The app is now running on `localhost:3000`.
+- The app should now be running and accessible on `localhost:3000`.
 - The backend that calls cal.com's API is running on `localhost:8000`.
+
+
 
 
 
@@ -53,6 +57,8 @@ $ docker-compose up --build
 As a Cal.com schedule is specific to a user (see below), each store will require its own Cal.com user account. For purposes of demonstration, I have created two separate user accounts but **not the full 13** (one per store). One "belongs to" **Cubitts Belgravia**, and the other applies to **Cubitts Borough**. For the purposes of this exercise, **all other stores are linked to the Belgravia "user" and schedule**. So to see different schedules, compare Borough's time slots with those of other stores. 
 
 On the "confirm booking" modal popup, enter a real email address. The booking will be processed by Cal.com and a confirmation email will be sent to the specified email address.
+
+
 
 
 
@@ -95,6 +101,8 @@ As user identity is recognised via a unique API key, we need to hold a separate 
 
 
 
+
+
 ## Performance considerations
 
 The main performance consideration is the time it takes to call the cal.com API. Fetching a list of time slots from the `/slots` endpoint typically take 1-2 seconds, which can cause a noticeable delay if each day's slots are only fetched when the user clicks that day on the calendar.
@@ -108,12 +116,22 @@ The approach taken here is as follows:
 
 
 
+
+
 ## Testing
 
 First, stop any running containers with `docker-compose down`. Then, to test the backend, `cd` inside the `/backend` directory, then run:
 
+**Backend**
+
 ```bash
-$ docker-compose exec backend python -m pytest .
+$ docker-compose exec backend python -m pytest
+```
+
+**Frontend (WIP - selectors need work so not passing yet)**
+
+```
+$ docker-compose exec frontend npm run test
 ```
 
 

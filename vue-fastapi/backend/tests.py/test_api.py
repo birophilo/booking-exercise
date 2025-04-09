@@ -1,11 +1,11 @@
-import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from datetime import datetime, timedelta
 
 from main import app
 
 client = TestClient(app)
+
 
 def test_get_slots_success():
     """Test successful retrieval of slots from the /slots endpoint"""
@@ -35,6 +35,7 @@ def test_get_slots_success():
         assert response.json() == mock_slots
         mock_get_slots.assert_called_once()
 
+
 def test_get_slots_invalid_store():
     """Test error handling for invalid store name"""
     # Create test parameters
@@ -51,6 +52,7 @@ def test_get_slots_invalid_store():
     # Check response
     assert response.status_code == 500
     # assert "Invalid slot data" in response.json()["detail"]
+
 
 def test_get_slots_api_error():
     """Test error handling for API errors"""
