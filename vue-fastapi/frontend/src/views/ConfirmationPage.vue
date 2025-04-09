@@ -67,7 +67,7 @@ export default {
     }
 
     const goToBooking = () => {
-      router.push('/booking')
+      router.push('/')
     }
 
     const goToHome = () => {

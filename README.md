@@ -50,7 +50,7 @@ $ docker-compose up --build
 
 ## Using the booking app
 
-As a Cal.com schedule is specific to a user (see below), each store will require its own Cal.com user account. For purposes of demonstration, I have created two separate user accounts but not the full 13 (one per store). One "belongs to" Cubitts Belgravia, and the other applies to Cubitts Borough. For the purposes of this exercise, all other stores are linked to the Belgravia "user" and schedule. So to see different schedules, compare Borough's time slots with those of other stores. 
+As a Cal.com schedule is specific to a user (see below), each store will require its own Cal.com user account. For purposes of demonstration, I have created two separate user accounts but **not the full 13** (one per store). One "belongs to" **Cubitts Belgravia**, and the other applies to **Cubitts Borough**. For the purposes of this exercise, **all other stores are linked to the Belgravia "user" and schedule**. So to see different schedules, compare Borough's time slots with those of other stores. 
 
 On the "confirm booking" modal popup, enter a real email address. The booking will be processed by Cal.com and a confirmation email will be sent to the specified email address.
 
